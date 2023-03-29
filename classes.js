@@ -1,10 +1,17 @@
 class Sprite {
-    constructor({ position, velocity, image, frames = { max: 1 }, sprites }) {
+    constructor({ position, velocity, image, frames = { max: 1 }, sprites, type }) {
         this.position = position
         this.image = image
         this.frames = {...frames, val: 0, elasped: 0}
 
         this.image.onload = () => {
+
+            if (type === 'player') {
+                this.width = this.image.width / this.frames.max
+                this.height = this.image.height 
+                return
+            }
+
             this.width = this.image.width / this.frames.max
             this.height = this.image.height
             // console.log(this.width)
@@ -52,15 +59,15 @@ class Sprite {
 
 // collisions
 class Boundary {
-    static width = 80
-    static height = 80
+    static width = 64
+    static height = 64
     constructor({position}) {
         this.position = position
         // Regarding to percentage from zoom size in Tiled map
-        // Here is using 500% with 16x16 (80)
+        // Here is using 400% with 16x16 (64)
         // The video was using 12x12 (48)
-        this.width = 80
-        this.height = 80
+        this.width = 64
+        this.height = 64
     }
 
     draw() {
