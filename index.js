@@ -1,7 +1,7 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 canvas.width = 1024
-canvas.height = 576;
+canvas.height = 576
 const backgroundImage = new Image()
 backgroundImage.src = './img/cat-island.png'
 const catDwnImage = new Image()
@@ -14,7 +14,6 @@ const playerLeftImage = new Image()
 playerLeftImage.src = './img/playerLeft.png'
 const playerRightImage = new Image()
 playerRightImage.src = './img/playerRight.png'
-
 const foregroundImage = new Image()
 foregroundImage.src = './img/foregroundObjects.png'
 
@@ -72,12 +71,11 @@ const player = new Sprite({
     },
     image: catDwnImage,
     frames: {
-        max: 4
+        max: 4,
+        hold: 10
     },
-    type: 'player',
+    type: 'player'
 })
-
-console.log(player)
 
 const background = new Sprite({
     image: backgroundImage,
@@ -164,10 +162,10 @@ const battle = {
 }
 
 function animate() {
-    window.requestAnimationFrame(animate);
+    const animationId = window.requestAnimationFrame(animate)
     // Drawing sequence
     // 1st drawing
-    background.draw();
+    background.draw()
     // 2nd drawing
     boundaries.forEach( boundary => boundary.draw())
     // 3rd drwaing
@@ -195,7 +193,7 @@ function animate() {
     // )
 
     let moving = true
-    player.moving = false
+    player.animate = false
     
     // when battle is active then stopped moving
     if (battle.initiated) return
@@ -225,8 +223,32 @@ function animate() {
                 // make battle is not active so frequently
                 && Math.random() < 0.01
             ) {
+                // deactivate current animation loop
+                // we need to cancel the animation with current animation id
+                window.cancelAnimationFrame(animationId)
                 battle.initiated = true
                 console.log("active battle")
+                // display overlaping animation when active battle
+                gsap.to('#overlaping', {
+                    opacity: 1,
+                    repeat: 3,
+                    yoyo: true,
+                    druation: 0.3,
+                    onComplete() {
+                        gsap.to('#overlaping', {
+                            opacity: 1,
+                            duration: 0.3,
+                            onComplete() {
+                                // activate a enw animation loop
+                                animateBattle()
+                                gsap.to('#overlaping', {
+                                    opacity: 0,
+                                    duration: 0.3,
+                                })
+                            }
+                        })
+                    }
+                })
                 break
             }
         }
@@ -234,7 +256,7 @@ function animate() {
     }
 
     if (keys.up.pressed && lastKey === 'w' || keys.up.pressed && lastKey === 'ArrowUp') {
-        player.moving = true
+        player.animate = true
         // player.image = player.sprites.up
         // collision detection
         for (let i = 0; i < boundaries.length; i++) {
@@ -251,7 +273,7 @@ function animate() {
                     }
                 }) 
             ) {
-                player.moving = false
+                player.animate = false
                 moving = false
                 break
             }
@@ -266,11 +288,11 @@ function animate() {
         // background.position.y += 3
     }
     else if (keys.left.pressed && lastKey === 'a' || keys.left.pressed && lastKey === 'ArrowLeft') {
-        player.moving = true
+        player.animate = true
         // player.image = player.sprites.left
         // collision detection
         for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i];
+            const boundary = boundaries[i]
             if ( 
                 retangularCollision({  
                     rectangle1: player, 
@@ -283,7 +305,7 @@ function animate() {
                     }
                 }) 
             ) {
-                player.moving = false
+                player.animate = false
                 moving = false
                 break
             }
@@ -298,11 +320,11 @@ function animate() {
         // background.position.x += 3
     }
     else if (keys.down.pressed && lastKey === 's' || keys.down.pressed && lastKey === 'ArrowDown') {
-        player.moving = true
+        player.animate = true
         // player.image = player.sprites.down
         // collision detection
         for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i];
+            const boundary = boundaries[i]
             if ( 
                 retangularCollision({  
                     rectangle1: player, 
@@ -315,7 +337,7 @@ function animate() {
                     }
                 }) 
             ) {
-                player.moving = false
+                player.animate = false
                 moving = false
                 break
             }
@@ -330,11 +352,11 @@ function animate() {
     }
     
     else if (keys.right.pressed && lastKey === 'd' || keys.right.pressed && lastKey === 'ArrowRight') {
-        player.moving = true
+        player.animate = true
         // player.image = player.sprites.right
         // collision detection
         for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i];
+            const boundary = boundaries[i]
             if ( 
                 retangularCollision({  
                     rectangle1: player, 
@@ -347,7 +369,7 @@ function animate() {
                     }
                 }) 
             ) {
-                player.moving = false
+                player.animate = false
                 moving = false
                 break
             }
@@ -362,7 +384,59 @@ function animate() {
     }
 }
 
+
+
+// battle assets
+const battleBackgroundImage = new Image()
+battleBackgroundImage.src = './img/battleBackground.png'
+const battleBackground = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    image: battleBackgroundImage,
+})
+
+const draggleImage = new Image()
+draggleImage.src = './img/draggleSprite.png'
+const draggle = new Sprite({
+    position: {
+        x: 800,
+        y: 100
+    },
+    image: draggleImage,
+    frames: {
+        max: 4,
+        hold: 20
+    },
+    animate: true
+})
+
+const embyImage = new Image()
+embyImage.src = './img/embySprite.png'
+const emby = new Sprite({
+    position: {
+        x: 300,
+        y: 325
+    },
+    image: embyImage,
+    frames: {
+        max: 4,
+        hold: 10
+    },
+    animate: true
+})
+
+function animateBattle() {
+    window.requestAnimationFrame(animateBattle)
+    console.log('animating battle')
+    battleBackground.draw()
+    draggle.draw()
+    emby.draw()
+}
+
 animate()
+// animateBattle()
 
 window.addEventListener('keydown', (e) => {
     switch(e.key) {

@@ -1,5 +1,13 @@
 class Sprite {
-    constructor({ position, velocity, image, frames = { max: 1 }, sprites, type }) {
+    constructor({ 
+        position, 
+        velocity, 
+        image, 
+        frames = { max: 1, hold: 10 }, 
+        sprites, 
+        animate = false, 
+        type 
+    }) {
         this.position = position
         this.image = image
         this.frames = {...frames, val: 0, elasped: 0}
@@ -17,8 +25,9 @@ class Sprite {
             // console.log(this.width)
             // console.log(this.height)
         }
-        this.moving = false
+        this.animate = animate
         this.sprites = sprites
+        this.frameHold = frames.hold
     }
 
     draw() {
@@ -42,14 +51,14 @@ class Sprite {
             this.image.height,
         )
 
-        if (!this.moving) return
+        if (!this.animate) return
 
         if (this.frames.max > 1) {
             this.frames.elasped++
         }
 
         // make chracter move normally
-        if (this.frames.elasped % 10 === 0) {
+        if (this.frames.elasped % this.frameHold === 0) {
             if (this.frames.val < this.frames.max -1) this.frames.val++
             else this.frames.val = 0
         }
