@@ -17,6 +17,8 @@ playerRightImage.src = './img/playerRight.png'
 const foregroundImage = new Image()
 foregroundImage.src = './img/foregroundObjects.png'
 
+
+
 const collisionsMap = []
 // Reference 40 tiles by Tiled about map size
 for (let i = 0; i < collisions.length; i += 40) {
@@ -162,6 +164,7 @@ const battle = {
 }
 
 function animate() {
+
     const animationId = window.requestAnimationFrame(animate)
     // Drawing sequence
     // 1st drawing
@@ -227,7 +230,10 @@ function animate() {
                 // we need to cancel the animation with current animation id
                 window.cancelAnimationFrame(animationId)
                 battle.initiated = true
-                console.log("active battle")
+                // console.log("active battle")
+                audio.Map.stop()
+                audio.initBattle.play()
+                audio.battle.play()
                 // display overlaping animation when active battle
                 gsap.to('#overlaping', {
                     opacity: 1,
@@ -240,6 +246,7 @@ function animate() {
                             duration: 0.3,
                             onComplete() {
                                 // activate a enw animation loop
+                                initBattle()
                                 animateBattle()
                                 gsap.to('#overlaping', {
                                     opacity: 0,
@@ -384,81 +391,6 @@ function animate() {
     }
 }
 
-
-
-// battle assets
-const battleBackgroundImage = new Image()
-battleBackgroundImage.src = './img/battleBackground.png'
-const battleBackground = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    image: battleBackgroundImage,
-})
-
-const draggleImage = new Image()
-draggleImage.src = './img/draggleSprite.png'
-const draggle = new Sprite({
-    position: {
-        x: 800,
-        y: 100
-    },
-    image: draggleImage,
-    frames: {
-        max: 4,
-        hold: 20
-    },
-    animate: true,
-    isEnemy: true,
-})
-
-const embyImage = new Image()
-embyImage.src = './img/embySprite.png'
-const emby = new Sprite({
-    position: {
-        x: 300,
-        y: 325
-    },
-    image: embyImage,
-    frames: {
-        max: 4,
-        hold: 10
-    },
-    animate: true,
-    
-})
-
-const renderedSprites = [draggle, emby]
-
-function animateBattle() {
-    window.requestAnimationFrame(animateBattle)
-    // console.log('animating battle')
-    battleBackground.draw()
-    // draggle.draw()
-    // emby.draw()
-
-    renderedSprites.forEach( sprite => {
-        sprite.draw()
-    })
-}
-
-// animate()
-animateBattle()
-
-const buttons = document.querySelectorAll('button')
-buttons.forEach( butotn => {
-    butotn.addEventListener('click', (e) => {
-        const selectedAttack = attacks[e.currentTarget.textContent] 
-        emby.attack({
-            attack: selectedAttack,
-            recipient: draggle, 
-            renderedSprites
-        })
-    })
-})
-
-
 window.addEventListener('keydown', (e) => {
     switch(e.key) {
         case 'w': case 'ArrowUp':
@@ -496,3 +428,15 @@ window.addEventListener('keyup', (e) => {
         break
     }
 })
+
+window.addEventListener('DOMContentLoaded', () => {
+    audio.Map.play()
+})
+
+// let clicked = false
+// addEventListener('click', () => {
+//     if (!clicked) {
+//         audio.Map.play()
+//         clicked = true
+//     }
+// })

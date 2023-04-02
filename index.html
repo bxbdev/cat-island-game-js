@@ -42,111 +42,138 @@
                 right: 0; 
                 opacity: 0; 
                 pointer-events: none;
+                z-index: 10;
         "></div>
 
-        <!-- Represents health bar of draggle (enemy) -->
-        <div
-            style="
+        <canvas></canvas>
+
+        <div id="userInterface" style="display: none;">
+            <!-- Represents health bar of draggle (enemy) -->
+            <div
+                style="
+                    position: absolute; 
+                    left:50px; 
+                    top: 50px; 
+                    background-color: white; 
+                    width: 250px; 
+                    border: 4px black solid;
+                    padding: 12px;
+            ">
+                <h1>Draggle</h1>
+                <div style="position: relative;">
+                    <div 
+                        style="
+                            height: 5px;
+                            background-color: #ccc;
+                            margin-top: 10px;
+                            z-index: 1;
+                    "></div>
+                    <div 
+                        id="enemyHealthBar"
+                        style="
+                            position: absolute;
+                            height: 5px;
+                            background-color: rgb(0, 158, 0);
+                            top: 0px;
+                            left: 0;
+                            right: 0;
+                            z-index: 1;
+                    "></div>
+                </div>
+            </div>
+
+            <!-- Represents health bar of emby (us) -->
+            <div style="
                 position: absolute; 
-                left:50px; 
-                top: 50px; 
+                right: 60px; 
+                top: 330px;
                 background-color: white; 
                 width: 250px; 
                 border: 4px black solid;
                 padding: 12px;
-        ">
-            <h1>Draggle</h1>
-            <div style="position: relative;">
-                <div 
-                    style="
-                        height: 5px;
-                        background-color: #ccc;
-                        margin-top: 10px;
-                        z-index: 1;
-                "></div>
-                <div 
-                    id="enemyHealthBar"
-                    style="
-                        position: absolute;
-                        height: 5px;
-                        background-color: rgb(0, 158, 0);
-                        top: 0px;
-                        left: 0;
-                        right: 0;
-                        z-index: 1;
-                "></div>
+            ">
+                <h1>Emby</h1>
+                <div style="position: relative;">
+                    <div 
+                        style="
+                            height: 5px;
+                            background-color: #ccc;
+                            margin-top: 10px;
+                            z-index: 1;
+                    "></div>
+                    <div
+                        id="playerHealthBar"
+                        style="
+                            position: absolute;
+                            height: 5px;
+                            background-color: rgb(0, 158, 0);
+                            top: 0px;
+                            left: 0;
+                            right: 0;
+                            z-index: 1;
+                    "></div>
+                </div>
             </div>
-        </div>
 
-        <!-- Represents health bar of emby (us) -->
-        <div style="
-            position: absolute; 
-            right: 60px; 
-            top: 330px;
-            background-color: white; 
-            width: 250px; 
-            border: 4px black solid;
-            padding: 12px;
-        ">
-            <h1>Emby</h1>
-            <div style="position: relative;">
-                <div 
-                    style="
-                        height: 5px;
-                        background-color: #ccc;
-                        margin-top: 10px;
-                        z-index: 1;
-                "></div>
+            
+
+            <div style="
+                position: absolute; 
+                left: 0; 
+                right: 0; 
+                bottom:0; 
+                background-color: #fff; 
+                height: 100px;
+                border-top: 4px black solid;
+                display: flex;
+            ">
                 <div
-                    id="playerHealthBar"
+                    id="dialogueBox"
                     style="
-                        position: absolute;
-                        height: 5px;
-                        background-color: rgb(0, 158, 0);
-                        top: 0px;
-                        left: 0;
-                        right: 0;
-                        z-index: 1;
-                "></div>
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    background-color: white;
+                    padding: 12px;
+                    display: none;
+                    cursor: pointer;
+                ">
+                    jkdjfls
+                </div>
+                <div 
+                    id="attacksBox"
+                    style="
+                        width: 66.66%;
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                ">
+                </div>
+                <div 
+                    id="attackType"
+                    style="
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center;
+                        width: 33.33%;
+                        border-left: 4px black solid;
+                ">
+                    <h1>Attack Type</h1>
+                </div>
             </div>
-        </div>
 
-        <canvas></canvas>
-
-        <div style="
-            position: absolute; 
-            left: 0; 
-            right: 0; 
-            bottom:0; 
-            background-color: #fff; 
-            height: 140px;
-            border-top: 4px black solid;
-            display: flex;
-        ">
-            <div style="
-                width: 66.66%;
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-            ">
-                <button>Tackle</button>
-                <button>Fireball</button>
-            </div>
-            <div style="
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-                width: 33.33%;
-                border-left: 4px black solid;
-            ">
-                <h1>Attack Type</h1>
-            </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js" integrity="sha512-cOH8ndwGgPo+K7pTvMrqYbmI8u8k6Sho3js0gOqVWTmQMlLIi6TbqGWRTpf1ga8ci9H3iPsvDLr4X7xwhC/+DQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="./data/audio.js"></script>
     <script src="./data/collisions.js"></script>
     <script src="./data/battleZones.js"></script>
     <script src="./data/attacks.js"></script>
+    <script src="./data/monsters.js"></script>
     <script src="classes.js"></script>
     <script src="index.js"></script>
+    <script src="battleScene.js"></script>
 </body>
 </html>
