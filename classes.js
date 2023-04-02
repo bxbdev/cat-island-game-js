@@ -45,6 +45,7 @@ class Sprite {
 
         // globalAlpha would be set to 1
         c.globalAlpha = this.opacity
+
         c.drawImage(
             this.image,
             // start x position everytime
@@ -108,6 +109,11 @@ class Monster extends Sprite {
         document.querySelector('#dialogueBox').innerHTML = `${this.name} fainted!`
         gsap.to(this.position, {
             y: this.position.y + 20,
+            onComplete: () => {
+                gsap.to(this.position, {
+                    y: this.position.y - 20,
+                })
+            }
         })
         gsap.to(this, {
             opacity: 0,
@@ -128,8 +134,6 @@ class Monster extends Sprite {
 
         recipient.health -= attack.damage
 
-        console.log(recipient)
-        
         switch(attack.name) {
             case 'Fireball':
                 const fireballImage = new Image()
